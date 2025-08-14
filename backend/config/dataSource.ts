@@ -19,15 +19,16 @@ dotenv.config();
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  //  ssl: {
-  //   rejectUnauthorized: false // Render uses self-signed certs
-  // },
+  url: process.env.EXTERNAL_DATABASE_URL,
+  // host: process.env.DB_HOST,
+  // port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+  // username: process.env.DB_USER,
+  // password: process.env.DB_PASSWORD,
+    ssl: {
+     rejectUnauthorized: false // Render uses self-signed certs
+   },
   database: process.env.DB_NAME,
-  synchronize: false, // Disable to avoid conflicts with existing schema
+  synchronize: true, // Disable to avoid conflicts with existing schema
   logging: false,
   entities: [
     Skill,
