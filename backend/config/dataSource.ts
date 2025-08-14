@@ -27,8 +27,8 @@ export const AppDataSource = new DataSource({
     ssl: {
      rejectUnauthorized: false // Render uses self-signed certs
    },
-  database: process.env.DB_NAME,
-  synchronize: true, // Disable to avoid conflicts with existing schema
+  // database: process.env.DB_NAME,
+  synchronize: false, // Disable to avoid conflicts with existing schema
   logging: false,
   entities: [
     Skill,
