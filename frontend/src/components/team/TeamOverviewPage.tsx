@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { userService, assessmentService } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
-import UserManagementModal from "./UserManagementModal";
+// import UserManagementModal from "./UserManagementModal";
 import DeleteModal from "../../lib/DeleteModal";
 import { UserDetailModal } from "../admin/modals/UserDetailModal";
 import {
@@ -721,22 +721,6 @@ const TeamOverviewPage = () => {
           </div>
         </div>
       )}
-
-      {/* User Management Modal */}
-      <UserManagementModal
-        isOpen={showUserModal}
-        onClose={() => setShowUserModal(false)}
-        onSuccess={handleUserModalSuccess}
-        editUser={editingUser}
-        mode={userModalMode}
-      />
-
-      {/* Delete Confirmation Modal */}
-      <DeleteModal
-        isOpen={showDeleteModal}
-        onClose={handleCloseDeleteModal}
-        onConfirm={confirmDeleteUser}
-      />
 
       {/* User Detail Modal */}
       <UserDetailModal

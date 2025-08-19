@@ -142,7 +142,7 @@ const OverdueDetailsModal: React.FC<Props> = ({
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <User className="h-4 w-4" />
-                        <span>Role: {assessment.user?.role?.name || 'N/A'}</span>
+                        <span>Role: {assessment.user?.Role?.name || 'N/A'}</span>
                       </div>
                     </div>
 

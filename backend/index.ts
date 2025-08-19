@@ -6,12 +6,10 @@ import skillRoutes from "./routes/skill/skillRoute";
 import skillTargetRoutes from "./routes/skill/skillTargetRoute";
 import Jwt from "@hapi/jwt";
 import authRoutes from "./routes/AuthRoute";
-import { seedInitialData } from "./seeder";
 import assessmentRoutes from "./routes/assessment/AssessmentRoutes";
 import TeamAssessmentRoutes from "./routes/team/TeamAssessmentRoutes";
 import assessmentCycleRoutes from "./routes/cycle/AssessmentCycleRoutes";
 import requestRoutes from "./routes/skill/SkillUpdateRequestRoute";
-import AssessmentCronJobs from "./services/assessment/AssessmentCronJobs";
 import { HRAdminRoutes } from "./routes/admin/HRAdminRoutes";
 
 
@@ -21,13 +19,6 @@ const init = async () => {
   // Initialize database connection first
   await AppDataSource.initialize();
   console.log("Database connected");
-  
-  // Initialize assessment cron jobs for automatic scheduling
-  AssessmentCronJobs.initializeCronJobs();
-  console.log("Assessment cron jobs initialized");
-  
-  // Then seed initial data
-  // await seedInitialData();
 
   const server = Hapi.server({
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
