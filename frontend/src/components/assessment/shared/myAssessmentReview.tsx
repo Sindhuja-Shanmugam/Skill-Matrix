@@ -29,7 +29,7 @@ import {
 } from "@/utils/assessmentUtils";
 
 
-const myAssessmentReview: React.FC = () => {
+const MyAssessmentReview: React.FC = () => {
   
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -349,4 +349,4 @@ const myAssessmentReview: React.FC = () => {
   );
 };
 
-export default myAssessmentReview;
+export default MyAssessmentReview;

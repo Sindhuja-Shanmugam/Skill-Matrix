@@ -62,6 +62,10 @@ export interface UserInfo {
   roleId?: number;
   leadId?: string;
   position?: Position;
+  Team?: Team;
+  Position?: Position;
+  Role?: Role;
+  Lead?: UserInfo;
 }
 
 export interface Assessment {

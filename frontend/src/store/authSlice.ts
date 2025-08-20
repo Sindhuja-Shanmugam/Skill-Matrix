@@ -12,6 +12,7 @@ interface User {
   role: Role;
   Team?: Team;
   position?: Position;
+  leadId? : User;
 }
 
 interface AuthState {

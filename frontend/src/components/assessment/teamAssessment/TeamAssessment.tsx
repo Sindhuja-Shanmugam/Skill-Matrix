@@ -25,12 +25,10 @@ import {
 } from "../../../types/assessmentTypes";
 import AllAssessmentsTab from "./page/AllAssessmentsTab";
 import PendingActionsTab from "./page/PendingActionsTab";
-import WriteAssessmentModal from "./WriteAssessmentModal";
-import AssessmentHistoryPage from "./modals/AssessmentHistoryModal";
 import SkillScoresModal from "./modals/SkillScoresModal";
 import OverdueDetailsModal from "./modals/OverdueDetailsModal";
 
-import UnifiedAssessmentReview from "../shared/myAssessmentReview";
+import MyAssessmentReview from "../shared/myAssessmentReview";
 
 interface Skill {
   id: number;
@@ -102,11 +100,9 @@ const TeamAssessment = () => {
                 skillService.getAllSkills(),
             ]);
 
-            // If assessment service doesn't return team members, fall back to user service
             if (membersRes.success && membersRes.data.length > 0) {
                 setTeamMembers(membersRes.data);
             } else if (user?.Team?.name) {
-                // Fallback to user service
                 const fallbackData = await userService.getTeamMatrix(user.Team.name);
                 setTeamMembers(fallbackData || []);
             }
@@ -140,7 +136,6 @@ const TeamAssessment = () => {
     useEffect(() => {
         if (selectedTab !== "writeAssessment") {
             setSelectedAssessment(null);
-            // Refresh data when returning from assessment writing to ensure latest scores are available
             if (selectedTab === "pending" || selectedTab === "assessments") {
                 loadTeamData();
             }
@@ -392,6 +387,8 @@ const TeamAssessment = () => {
         { id: "pending", label: "Pending Actions", icon: Clock },
     ];
 
+    if(user?.leadId === null) tabs.shift();
+
     return (
         <div className="space-y-6">
             {/* Header with Statistics */}
@@ -476,7 +473,7 @@ const TeamAssessment = () => {
                 <div className="p-6">
                     {/* Tab Content */}
                     {selectedTab === "my-assessments" && (
-                        <UnifiedAssessmentReview />
+                        <MyAssessmentReview />
                     )}
                     {selectedTab === "assessments" && (
                         <AllAssessmentsTab 
@@ -506,11 +503,6 @@ const TeamAssessment = () => {
                         />
                     )}
 
-                    {/* Skill Scores Modal */}
-                        <SkillScoresModal 
-                            data={skillModalData}
-                            onClose={() => setShowSkillModal(false)}
-                        />
                     {/* Overdue Details Modal */}
                     <OverdueDetailsModal
                         isOpen={showOverdueModal}
