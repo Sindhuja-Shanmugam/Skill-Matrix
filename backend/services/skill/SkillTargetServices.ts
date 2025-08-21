@@ -79,6 +79,23 @@ const skillTargetService = {
         throw new Error(`Failed to retrieve guide: ${error.message}`);
         }
     },
+
+    createUpgradeGuide: async(skillId: number, fromLevel: number, toLevel: number, guidance: string, resourceLink?: string) => {
+        try {
+            const upgradeGuide = SkillUpgradeGuideRepo.create({
+                skillId,
+                fromLevel,
+                toLevel,
+                guidance,
+                resourceLink: resourceLink || null,
+            });
+
+            await SkillUpgradeGuideRepo.save(upgradeGuide);
+            return upgradeGuide;
+        } catch (error: any) {
+            throw new Error(`Failed to create upgrade guide: ${error.message}`);
+        }
+    },
 }
 
 export default skillTargetService;

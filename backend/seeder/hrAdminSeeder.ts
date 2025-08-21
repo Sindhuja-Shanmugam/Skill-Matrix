@@ -1,15 +1,15 @@
 import { AppDataSource } from "../config/dataSource";
 import { Team } from "../entities/Team";
-import { SubTeam } from "../entities/SubTeam";
+import { subTeam } from "../entities/subTeam";
 import { Position } from "../entities/Position";
-import { TeamType, SubTeamType, PositionType } from "../types/entities";
+import { TeamType, subTeamType, PositionType } from "../types/entities";
 
 export async function seedHRAdminData() {
   try {
     await AppDataSource.initialize();
     
     const teamRepository = AppDataSource.getRepository(Team);
-    const subTeamRepository = AppDataSource.getRepository(SubTeam);
+    const subTeamRepository = AppDataSource.getRepository(subTeam);
     const positionRepository = AppDataSource.getRepository(Position);
 
     // Clear existing data (if any exists)
@@ -36,7 +36,6 @@ export async function seedHRAdminData() {
       {
         id: 1,
         name: "InfoRiver",
-        description: "Advanced data visualization and analytics platform",
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -44,7 +43,6 @@ export async function seedHRAdminData() {
       {
         id: 2,
         name: "InfoBridge",
-        description: "Data integration and connectivity solutions",
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -52,7 +50,6 @@ export async function seedHRAdminData() {
       {
         id: 3,
         name: "Valq",
-        description: "Planning and budgeting application",
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -63,23 +60,20 @@ export async function seedHRAdminData() {
     console.log("Teams seeded successfully");
 
     // Seed Sub-Teams
-    const subTeams: Partial<SubTeamType>[] = [
+    const subTeams: Partial<subTeamType>[] = [
       // InfoRiver Sub-Teams
       {
         name: "Frontend Development",
-        description: "React and Angular development team",
         teamId: savedTeams[0].id,
         isActive: true,
       },
       {
         name: "Backend Development",
-        description: "API and server-side development",
         teamId: savedTeams[0].id,
         isActive: true,
       },
       {
         name: "Quality Assurance",
-        description: "Testing and quality control",
         teamId: savedTeams[0].id,
         isActive: true,
       },
@@ -87,13 +81,11 @@ export async function seedHRAdminData() {
       // InfoBridge Sub-Teams
       {
         name: "Data Engineering",
-        description: "Data pipeline and ETL processes",
         teamId: savedTeams[1].id,
         isActive: true,
       },
       {
         name: "Integration Team",
-        description: "Third-party integrations and APIs",
         teamId: savedTeams[1].id,
         isActive: true,
       },
@@ -101,13 +93,11 @@ export async function seedHRAdminData() {
       // Valq Sub-Teams
       {
         name: "Product Development",
-        description: "Core product features and enhancements",
         teamId: savedTeams[2].id,
         isActive: true,
       },
       {
         name: "Analytics Team",
-        description: "Business intelligence and reporting",
         teamId: savedTeams[2].id,
         isActive: true,
       },
@@ -120,52 +110,42 @@ export async function seedHRAdminData() {
     const positions: Partial<PositionType>[] = [
       {
         name: "Frontend Developer",
-        description: "Develops user interfaces and client-side applications",
         isActive: true,
       },
       {
         name: "Backend Developer",
-        description: "Develops server-side applications and APIs",
         isActive: true,
       },
       {
         name: "Full Stack Developer",
-        description: "Works on both frontend and backend development",
         isActive: true,
       },
       {
         name: "Quality Assurance Engineer",
-        description: "Tests applications and ensures quality standards",
         isActive: true,
       },
       {
         name: "DevOps Engineer",
-        description: "Manages deployment and infrastructure",
         isActive: true,
       },
       {
         name: "Data Engineer",
-        description: "Builds and maintains data pipelines",
         isActive: true,
       },
       {
         name: "Product Manager",
-        description: "Manages product development and strategy",
         isActive: true,
       },
       {
         name: "HR Manager",
-        description: "Manages human resources and organizational development",
         isActive: true,
       },
       {
         name: "Team Lead",
-        description: "Leads development teams and provides technical guidance",
         isActive: true,
       },
       {
         name: "Senior Developer",
-        description: "Experienced developer with leadership responsibilities",
         isActive: true,
       },
     ];

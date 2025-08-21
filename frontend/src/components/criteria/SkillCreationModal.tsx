@@ -114,11 +114,11 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
     }
   }, [editSkill]);
 
-  // Generate all possible upgrade paths (1->2, 1->3, 1->4, 2->3, 2->4, 3->4)
+  // Generate all possible upgrade paths (1->2, 1->3, 1->4, 1->5, 2->3, 2->4, 2->5, 3->4, 3->5, 4->5)
   const generateUpgradePaths = () => {
     const paths: { fromLevel: number; toLevel: number }[] = [];
-    for (let from = 1; from <= 3; from++) {
-      for (let to = from + 1; to <= 4; to++) {
+    for (let from = 1; from <= 4; from++) {
+      for (let to = from + 1; to <= 5; to++) {
         paths.push({ fromLevel: from, toLevel: to });
       }
     }
@@ -130,6 +130,7 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
   // Initialize upgrade guides when moving to step 2
   const initializeUpgradeGuides = () => {
     if (upgradeGuides.length === 0) {
+      console.log("Initializing upgrade guides with paths:", upgradePaths);
       const initialGuides = upgradePaths.map((path) => ({
         fromLevel: path.fromLevel,
         toLevel: path.toLevel,
@@ -137,6 +138,7 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
         resourceLink: "",
         skillId: createdSkillId || null,
       }));
+      console.log("Created initial guides:", initialGuides);
       setUpgradeGuides(initialGuides);
     }
   };
@@ -203,7 +205,17 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
         });
         console.log("Skill created successfully:", response);
         setCreatedSkillId(response.id);
-        initializeUpgradeGuides();
+        
+        // Initialize upgrade guides immediately with the new skill ID
+        const initialGuides = upgradePaths.map((path) => ({
+          fromLevel: path.fromLevel,
+          toLevel: path.toLevel,
+          guidance: "",
+          resourceLink: "",
+          skillId: response.id,
+        }));
+        setUpgradeGuides(initialGuides);
+        
         setCurrentStep(2);
       }
     } catch (err) {
@@ -236,6 +248,13 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
   };
 
   const handleGuideSave = async () => {
+    // Ensure upgrade guides are initialized
+    if (upgradeGuides.length === 0) {
+      initializeUpgradeGuides();
+      setError("Please wait for upgrade guides to initialize");
+      return;
+    }
+    
     if (upgradeGuides.some((guide) => !guide.guidance.trim())) {
       setError("Guidance is required for each upgrade path");
       return;
@@ -248,10 +267,21 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
       setLoading(true);
       setError(null);
 
+      console.log("All upgrade guides before saving:", upgradeGuides);
+
       for (const guide of upgradeGuides) {
         if (!guide.guidance.trim()) continue; // Skip empty guides
+        
+        // Validate that fromLevel and toLevel are valid numbers
+        if (!Number.isInteger(guide.fromLevel) || !Number.isInteger(guide.toLevel)) {
+          console.error("Invalid level values:", guide);
+          setError(`Invalid level values for guide: ${guide.fromLevel} -> ${guide.toLevel}`);
+          return;
+        }
+        
         console.log("Saving guide:", guide);
-        await skillUpgradeService.createGuide({
+        console.log("Guide fromLevel:", guide.fromLevel, "toLevel:", guide.toLevel);
+        await skillUpgradeService.createTarget({
           skillId: createdSkillId,
           fromLevel: guide.fromLevel,
           toLevel: guide.toLevel,
