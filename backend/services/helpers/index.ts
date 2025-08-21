@@ -1,4 +1,3 @@
-import { validate } from "node-cron";
 import { assessmentRequestRepo, scoreRepo, userRepo, skillRepo, AuditRepo } from "../../config/dataSource";
 import { AssessmentStatus,  role, TIME_CONSTANTS, AssessmentScheduleType } from "../../enum/enum";
 import { UserType } from "../../types/entities";

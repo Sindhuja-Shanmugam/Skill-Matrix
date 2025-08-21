@@ -32,6 +32,12 @@ const skillTargetRoutes = {
         path: '/guide',
         options: authorizeRoles([role.EMPLOYEE, role.LEAD]),
         handler: SkillTargetController.getGuide,
+      },
+      {
+        method: "POST",
+        path: '/upgrade-guide/create',
+        options: authorizeRoles([role.HR, role.ADMIN, role.LEAD]),
+        handler: SkillTargetController.createUpgradeGuide,
       }
       
     ]);

@@ -26,7 +26,6 @@ import { BulkAssessmentModal } from "./modals/bulkAssessmentModel";
 import { OverdueDetailsModal } from "./modals/overdueDetailsModal";
 //import { InitiateAssessmentModal } from "./initiateAssessmentModel";
 import { PendingReviewsTab } from "./page/pendingReviewsTab";
-import { AssessmentsTab } from "./page/assessmentsTab";
 import { CyclesTab } from "./page/cyclesTab";
 import { OverviewTab } from "./page/overviewTab";
 import { useNavigate } from "react-router-dom";
