@@ -62,6 +62,9 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
   );
   const isEditMode = mode === "edit" || !!editSkill;
 
+  // Track if there are unsaved changes
+  const [hasChanges, setHasChanges] = useState(false);
+
   // Positions data
   const [positions, setPositions] = useState<Position[]>([]);
   const [selectedPositions, setSelectedPositions] = useState<number[]>(
@@ -113,6 +116,24 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
       setCreatedSkillId(editSkill.id);
     }
   }, [editSkill]);
+
+  // Detect changes for Save button
+  useEffect(() => {
+    if (!isEditMode || !editSkill) {
+      setHasChanges(false);
+      return;
+    }
+    const skillChanged =
+      skillData.name !== (editSkill.name || "") ||
+      skillData.basic !== (editSkill.basic || "") ||
+      skillData.low !== (editSkill.low || "") ||
+      skillData.medium !== (editSkill.medium || "") ||
+      skillData.high !== (editSkill.high || "") ||
+      skillData.expert !== (editSkill.expert || "");
+    const positionsChanged =
+      JSON.stringify(selectedPositions) !== JSON.stringify(editSkill.positionId ? [editSkill.positionId] : []);
+    setHasChanges(skillChanged || positionsChanged);
+  }, [skillData, selectedPositions, editSkill, isEditMode]);
 
   // Generate all possible upgrade paths (1->2, 1->3, 1->4, 1->5, 2->3, 2->4, 2->5, 3->4, 3->5, 4->5)
   const generateUpgradePaths = () => {
@@ -412,7 +433,7 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
-                    <div className="p-2 space-y-2">
+                    <div className="p-2 space-y-2 max-h-60 overflow-y-auto">
                       {positions.map((position) => (
                         <div
                           key={position.id}
@@ -489,31 +510,43 @@ const SkillCreationModal: React.FC<SkillCreationModalProps> = ({
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
-              <Button
-                onClick={handleSkillCreate}
-                disabled={
-                  loading ||
-                  !skillData.name ||
-                  !skillData.basic ||
-                  !skillData.low ||
-                  !skillData.medium ||
-                  !skillData.high ||
-                  !skillData.expert ||
-                  selectedPositions.length === 0
-                }
-              >
-                {isEditMode ? (
-                  <>
+              {isEditMode ? (
+                hasChanges && (
+                  <Button
+                    onClick={handleSkillCreate}
+                    disabled={
+                      loading ||
+                      !skillData.name ||
+                      !skillData.basic ||
+                      !skillData.low ||
+                      !skillData.medium ||
+                      !skillData.high ||
+                      !skillData.expert ||
+                      selectedPositions.length === 0
+                    }
+                  >
                     <Save className="h-4 w-4 mr-2" />
                     {loading ? "Saving..." : "Save Changes"}
-                  </>
-                ) : (
-                  <>
-                    <ArrowRight className="h-4 w-4 mr-2" />
-                    {loading ? "Creating..." : "Next: Add Upgrade Guides"}
-                  </>
-                )}
-              </Button>
+                  </Button>
+                )
+              ) : (
+                <Button
+                  onClick={handleSkillCreate}
+                  disabled={
+                    loading ||
+                    !skillData.name ||
+                    !skillData.basic ||
+                    !skillData.low ||
+                    !skillData.medium ||
+                    !skillData.high ||
+                    !skillData.expert ||
+                    selectedPositions.length === 0
+                  }
+                >
+                  <ArrowRight className="h-4 w-4 mr-2" />
+                  {loading ? "Creating..." : "Next: Add Upgrade Guides"}
+                </Button>
+              )}
             </div>
           </div>
         )}
